@@ -14,12 +14,14 @@
   "dependencies": {
     "@libsql/client": "^0.15.15",
     "@nuxt/eslint": "^1.13.0",
+    "@nuxt/ui": "^4.4.0",
     "@nuxthub/core": "^0.10.6",
     "@upstash/redis": "^1.36.1",
     "@vercel/blob": "^2.0.1",
     "drizzle-kit": "^0.31.8",
     "drizzle-orm": "^0.45.1",
-    "nuxt": "^4.3.0"
+    "nuxt": "^4.3.0",
+    "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
     "@nuxt/eslint-config": "^1.13.0",
