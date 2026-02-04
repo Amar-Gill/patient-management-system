@@ -53,77 +53,84 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <UContainer>
-    <UPageCard
-      title="New Patient"
-      description="Enter the patient's details below."
-      icon="mdi-account-plus"
-      class="max-w-xl mx-auto"
-    >
-      <UForm
-        :schema="schema"
-        :state="state"
-        class="space-y-4"
-        @submit="onSubmit"
-      >
-        <UFormField
-          label="First Name"
-          name="firstName"
-          required
+  <UDashboardPanel>
+    <template #header>
+      <UDashboardNavbar title="New Patient Registration" />
+    </template>
+    <template #body>
+      <UContainer>
+        <UPageCard
+          title="New Patient"
+          description="Enter the patient's details below."
+          icon="mdi-account-plus"
+          class="max-w-xl mx-auto"
         >
-          <UInput
-            v-model="state.firstName"
-            placeholder="John"
-          />
-        </UFormField>
+          <UForm
+            :schema="schema"
+            :state="state"
+            class="space-y-4"
+            @submit="onSubmit"
+          >
+            <UFormField
+              label="First Name"
+              name="firstName"
+              required
+            >
+              <UInput
+                v-model="state.firstName"
+                placeholder="John"
+              />
+            </UFormField>
 
-        <UFormField
-          label="Middle Name"
-          name="middleName"
-        >
-          <UInput
-            v-model="state.middleName"
-            placeholder="William"
-          />
-        </UFormField>
+            <UFormField
+              label="Middle Name"
+              name="middleName"
+            >
+              <UInput
+                v-model="state.middleName"
+                placeholder="William"
+              />
+            </UFormField>
 
-        <UFormField
-          label="Last Name"
-          name="lastName"
-          required
-        >
-          <UInput
-            v-model="state.lastName"
-            placeholder="Doe"
-          />
-        </UFormField>
+            <UFormField
+              label="Last Name"
+              name="lastName"
+              required
+            >
+              <UInput
+                v-model="state.lastName"
+                placeholder="Doe"
+              />
+            </UFormField>
 
-        <UFormField
-          label="Date of Birth"
-          name="dateOfBirth"
-          required
-        >
-          <UInputDate v-model="state.dateOfBirth" />
-        </UFormField>
+            <UFormField
+              label="Date of Birth"
+              name="dateOfBirth"
+              required
+            >
+              <UInputDate v-model="state.dateOfBirth" />
+            </UFormField>
 
-        <UFormField
-          label="Address"
-          name="address"
-          required
-        >
-          <UTextarea
-            v-model="state.address"
-            placeholder="123 Main Street, Apt 4B, New York, NY 10001"
-            :rows="3"
-          />
-        </UFormField>
+            <UFormField
+              label="Address"
+              name="address"
+              required
+            >
+              <UTextarea
+                v-model="state.address"
+                placeholder="123 Main Street, Apt 4B, New York, NY 10001"
+                :rows="3"
+              />
+            </UFormField>
 
-        <div class="flex gap-2 pt-4">
-          <UButton type="submit">
-            Submit
-          </UButton>
-        </div>
-      </UForm>
-    </UPageCard>
-  </UContainer>
+            <div class="flex gap-2 pt-4">
+              <UButton type="submit">
+                Submit
+              </UButton>
+            </div>
+          </UForm>
+        </UPageCard>
+      </UContainer>
+    </template>
+  </UDashboardPanel>
 </template>
