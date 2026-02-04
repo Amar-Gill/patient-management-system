@@ -8,6 +8,11 @@ const items: NavigationMenuItem[] = [
     to: '/',
   },
   {
+    label: 'Patients',
+    icon: 'i-lucide-users',
+    to: '/patients',
+  },
+  {
     label: 'New Patient',
     icon: 'i-lucide-user-plus',
     to: '/new-patient',
