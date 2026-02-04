@@ -102,6 +102,7 @@ const inputDate = useTemplateRef('inputDate')
           description="Enter the patient's details below."
           icon="mdi-account-plus"
           class="max-w-xl mx-auto"
+          variant="subtle"
         >
           <UForm
             :schema="schema"
