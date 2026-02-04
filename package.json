@@ -21,7 +21,8 @@
     "drizzle-kit": "^0.31.8",
     "drizzle-orm": "^0.45.1",
     "nuxt": "^4.3.0",
-    "tailwindcss": "^4.1.18"
+    "tailwindcss": "^4.1.18",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@nuxt/eslint-config": "^1.13.0",
