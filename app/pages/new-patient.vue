@@ -2,6 +2,8 @@
 import { z } from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
 
+import { CalendarDate } from '@internationalized/date'
+
 const schema = z.object({
   firstName: z
     .string()
@@ -39,7 +41,7 @@ const state = reactive<Partial<Schema>>({
   firstName: '',
   lastName: '',
   middleName: '',
-  dateOfBirth: undefined,
+  dateOfBirth: new CalendarDate(new Date().getFullYear() - 20, 1, 1),
   address: '',
   status: 'inquiry',
 })
@@ -58,10 +60,12 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   state.firstName = ''
   state.lastName = ''
   state.middleName = ''
-  state.dateOfBirth = undefined
+  state.dateOfBirth = new CalendarDate(new Date().getFullYear() - 20, 1, 1)
   state.address = ''
   state.status = 'inquiry'
 }
+
+const inputDate = useTemplateRef('inputDate')
 </script>
 
 <template>
@@ -120,7 +124,30 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
               name="dateOfBirth"
               required
             >
-              <UInputDate v-model="state.dateOfBirth" />
+              <UInputDate
+                ref="inputDate"
+                v-model="state.dateOfBirth"
+              >
+                <template #trailing>
+                  <UPopover :reference="inputDate?.inputsRef[3]?.$el">
+                    <UButton
+                      color="neutral"
+                      variant="link"
+                      size="sm"
+                      icon="i-lucide-calendar"
+                      aria-label="Select a date"
+                      class="px-0"
+                    />
+
+                    <template #content>
+                      <UCalendar
+                        v-model="state.dateOfBirth"
+                        class="p-2"
+                      />
+                    </template>
+                  </UPopover>
+                </template>
+              </UInputDate>
             </UFormField>
 
             <UFormField
