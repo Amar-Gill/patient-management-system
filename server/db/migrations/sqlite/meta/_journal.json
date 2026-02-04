@@ -8,6 +8,13 @@
       "when": 1765423539366,
       "tag": "0000_dapper_thena",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1770191073548,
+      "tag": "0001_brief_zombie",
+      "breakpoints": true
     }
   ]
 }
