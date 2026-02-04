@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { z } from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
-
 import { CalendarDate } from '@internationalized/date'
 
 const schema = z.object({
@@ -18,6 +17,13 @@ const schema = z.object({
     .any()
     .refine(value => value !== null && value !== undefined, {
       message: 'Date of birth is required',
+    })
+    .transform((value) => {
+      if (value instanceof CalendarDate) {
+        const jsDate = new Date(value.year, value.month - 1, value.day)
+        return jsDate.toISOString().split('T')[0]
+      }
+      return value
     }),
   address: z
     .string()
@@ -49,7 +55,23 @@ const state = reactive<Partial<Schema>>({
 const toast = useToast()
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  console.log('Form submitted with data:', event.data)
+  const patient = await $fetch('/api/patients', {
+    method: 'POST',
+    body: event.data,
+    onResponseError({ response }) {
+      toast.add({
+        icon: 'mdi-alert-circle',
+        title: 'Error',
+        description: `Failed to create patient: ${response._data.message || response.statusText}`,
+        color: 'error',
+      })
+    },
+  })
+
+  if (!patient) {
+    return
+  }
+
   toast.add({
     icon: 'mdi-check-circle',
     title: 'Patient Created',
