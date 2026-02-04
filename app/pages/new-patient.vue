@@ -21,9 +21,19 @@ const schema = z.object({
     .string()
     .min(1, 'Address is required')
     .min(10, 'Address must be at least 10 characters'),
+  status: z.enum(['inquiry', 'onboarding', 'active', 'churned'], {
+    error: () => ({ message: 'Please select a valid status' }),
+  }),
 })
 
 type Schema = z.output<typeof schema>
+
+const statusOptions = [
+  { label: 'Inquiry', value: 'inquiry' },
+  { label: 'Onboarding', value: 'onboarding' },
+  { label: 'Active', value: 'active' },
+  { label: 'Churned', value: 'churned' },
+]
 
 const state = reactive<Partial<Schema>>({
   firstName: '',
@@ -31,6 +41,7 @@ const state = reactive<Partial<Schema>>({
   middleName: '',
   dateOfBirth: undefined,
   address: '',
+  status: 'inquiry',
 })
 
 const toast = useToast()
@@ -49,6 +60,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   state.middleName = ''
   state.dateOfBirth = undefined
   state.address = ''
+  state.status = 'inquiry'
 }
 </script>
 
@@ -120,6 +132,17 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
                 v-model="state.address"
                 placeholder="123 Main Street, Apt 4B, New York, NY 10001"
                 :rows="3"
+              />
+            </UFormField>
+
+            <UFormField
+              label="Patient Status"
+              name="status"
+              required
+            >
+              <USelect
+                v-model="state.status"
+                :items="statusOptions"
               />
             </UFormField>
 
