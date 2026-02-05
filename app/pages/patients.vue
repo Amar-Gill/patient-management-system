@@ -60,7 +60,32 @@ function formatDate(date: Date) {
     <template #body>
       <UContainer>
         <UPageCard variant="subtle">
-          <div class="flex px-4 py-3.5 border-b border-accented">
+          <div class="flex space-x-2 py-3.5 border-b border-accented">
+            <UInput
+              :model-value="
+                table?.tableApi
+                  ?.getColumn('lastName')
+                  ?.getFilterValue() as string
+              "
+              class="max-w-sm"
+              placeholder="Filter lastName..."
+              @update:model-value="
+                table?.tableApi?.getColumn('lastName')?.setFilterValue($event)
+              "
+            />
+
+            <UInput
+              :model-value="
+                table?.tableApi
+                  ?.getColumn('address')
+                  ?.getFilterValue() as string
+              "
+              class="max-w-sm"
+              placeholder="Filter address..."
+              @update:model-value="
+                table?.tableApi?.getColumn('address')?.setFilterValue($event)
+              "
+            />
             <USelectMenu
               :model-value="
                 table?.tableApi
