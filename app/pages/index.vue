@@ -9,14 +9,25 @@
           title="Welcome to the Dashboard"
           description="Here you can manage your application."
           icon="mdi-view-dashboard"
-          class="max-w-2xl mx-auto"
-          variant="subtle"
-        >
-          <p class="text-center">
-            Use the navigation menu to access different sections of the
-            dashboard.
-          </p>
-        </UPageCard>
+          class="w-full"
+          variant="naked"
+        />
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+          <UPageCard
+            title="View Patients"
+            description="Manage your patient records."
+            icon="mdi-account-multiple"
+            variant="subtle"
+            to="/patients"
+          />
+          <UPageCard
+            title="Register New Patient"
+            description="Add a new patient to the system."
+            icon="mdi-account-plus"
+            variant="subtle"
+            to="/new-patient"
+          />
+        </div>
       </UContainer>
     </template>
   </UDashboardPanel>
