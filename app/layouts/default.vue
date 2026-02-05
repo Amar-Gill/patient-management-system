@@ -22,7 +22,11 @@ const items: NavigationMenuItem[] = [
 
 <template>
   <UDashboardGroup>
-    <UDashboardSidebar>
+    <UDashboardSidebar
+      resizable
+      class="bg-elevated/25"
+      :ui="{ footer: 'lg:border-t lg:border-default' }"
+    >
       <UNavigationMenu
         :items="items"
         orientation="vertical"
