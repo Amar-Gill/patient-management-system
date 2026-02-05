@@ -76,6 +76,18 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     icon: 'mdi-check-circle',
     title: 'Patient Created',
     description: `Patient ${event.data.firstName} ${event.data.lastName} has been created successfully.`,
+    actions: [
+      {
+        icon: 'mdi-account-multiple',
+        label: 'View Patients',
+        color: 'neutral',
+        variant: 'outline',
+        onClick: () => {
+          navigateTo('/patients')
+        },
+      },
+    ],
+    color: 'success',
   })
 
   // Reset form state
