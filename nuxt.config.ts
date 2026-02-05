@@ -7,9 +7,6 @@ export default defineNuxtConfig({
 
   hub: {
     db: 'sqlite',
-    kv: true,
-    blob: true,
-    cache: true,
   },
 
   eslint: {
