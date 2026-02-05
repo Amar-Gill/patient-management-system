@@ -93,19 +93,6 @@ function formatDate(date: Date) {
             <UInput
               :model-value="
                 table?.tableApi
-                  ?.getColumn('middleName')
-                  ?.getFilterValue() as string
-              "
-              class="max-w-sm"
-              placeholder="Filter middle name..."
-              @update:model-value="
-                table?.tableApi?.getColumn('middleName')?.setFilterValue($event)
-              "
-            />
-
-            <UInput
-              :model-value="
-                table?.tableApi
                   ?.getColumn('lastName')
                   ?.getFilterValue() as string
               "
