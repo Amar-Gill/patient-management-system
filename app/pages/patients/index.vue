@@ -135,7 +135,21 @@ function formatDate(date: Date) {
             :data="patients"
             :columns="columns"
             :loading="status === 'pending'"
-          />
+          >
+            <template #empty>
+              <div class="text-center text-sm text-muted-foreground">
+                No patients found with current filters.
+                <div class="mt-2">
+                  <UButton
+                    label="Add Patient"
+                    icon="i-lucide-user-plus"
+                    to="/patients/new"
+                    variant="subtle"
+                  />
+                </div>
+              </div>
+            </template>
+          </UTable>
         </UPageCard>
       </UContainer>
     </template>
