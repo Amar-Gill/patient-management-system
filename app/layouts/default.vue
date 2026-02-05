@@ -15,7 +15,7 @@ const items: NavigationMenuItem[] = [
   {
     label: 'New Patient',
     icon: 'i-lucide-user-plus',
-    to: '/new-patient',
+    to: '/patients/new',
   },
 ]
 </script>

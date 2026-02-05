@@ -25,7 +25,7 @@
             description="Add a new patient to the system."
             icon="mdi-account-plus"
             variant="subtle"
-            to="/new-patient"
+            to="/patients/new"
           />
         </div>
       </UContainer>
