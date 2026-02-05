@@ -113,7 +113,7 @@ const inputDate = useTemplateRef('inputDate')
           title="New Patient"
           description="Enter the patient's details below."
           icon="mdi-account-plus"
-          class="max-w-xl mx-auto"
+          class="max-w-md mx-auto"
           variant="subtle"
         >
           <UForm
@@ -130,6 +130,7 @@ const inputDate = useTemplateRef('inputDate')
               <UInput
                 v-model="state.firstName"
                 placeholder="John"
+                class="w-full"
               />
             </UFormField>
 
@@ -140,6 +141,7 @@ const inputDate = useTemplateRef('inputDate')
               <UInput
                 v-model="state.middleName"
                 placeholder="William"
+                class="w-full"
               />
             </UFormField>
 
@@ -151,6 +153,7 @@ const inputDate = useTemplateRef('inputDate')
               <UInput
                 v-model="state.lastName"
                 placeholder="Doe"
+                class="w-full"
               />
             </UFormField>
 
@@ -194,6 +197,7 @@ const inputDate = useTemplateRef('inputDate')
                 v-model="state.address"
                 placeholder="123 Main Street, Apt 4B, New York, NY 10001"
                 :rows="3"
+                class="w-full"
               />
             </UFormField>
 
@@ -208,7 +212,7 @@ const inputDate = useTemplateRef('inputDate')
               />
             </UFormField>
 
-            <div class="flex gap-2 pt-4">
+            <div class="flex gap-2 pt-4 w-full justify-center">
               <UButton type="submit">
                 Submit
               </UButton>
