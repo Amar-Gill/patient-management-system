@@ -27,6 +27,9 @@ const items: NavigationMenuItem[] = [
         :items="items"
         orientation="vertical"
       />
+      <template #footer>
+        <UColorModeSelect />
+      </template>
     </UDashboardSidebar>
 
     <slot />
