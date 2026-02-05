@@ -13,6 +13,7 @@ const statusOptions = ref<Patient['status'][]>([
 const table = useTemplateRef('table')
 
 const UBadge = resolveComponent('UBadge')
+const UButton = resolveComponent('UButton')
 
 const columns: TableColumn<Patient>[] = [
   { accessorKey: 'firstName', header: 'First Name' },
@@ -42,7 +43,22 @@ const columns: TableColumn<Patient>[] = [
   },
   {
     accessorKey: 'createdAt',
-    header: 'Registered At',
+    header: ({ column }) => {
+      const isSorted = column.getIsSorted()
+
+      return h(UButton, {
+        color: 'neutral',
+        variant: 'ghost',
+        label: 'Registered At',
+        icon: isSorted
+          ? isSorted === 'asc'
+            ? 'i-lucide-arrow-up-narrow-wide'
+            : 'i-lucide-arrow-down-wide-narrow'
+          : 'i-lucide-arrow-up-down',
+        class: '-mx-2.5',
+        onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
+      })
+    },
     cell: ({ row }) => formatDate(row.original.createdAt),
   },
 ]
