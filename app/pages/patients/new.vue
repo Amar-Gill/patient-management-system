@@ -36,7 +36,7 @@ const schema = z.object({
 
 type Schema = z.output<typeof schema>
 
-const statusOptions = [
+const statusOptions: { label: string, value: Patient['status'] }[] = [
   { label: 'Inquiry', value: 'inquiry' },
   { label: 'Onboarding', value: 'onboarding' },
   { label: 'Active', value: 'active' },
