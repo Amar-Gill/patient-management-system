@@ -3,6 +3,15 @@ import type { TableColumn } from '@nuxt/ui'
 
 const { data: patients, status, error } = useFetch<Patient[]>('/api/patients')
 
+const statusOptions = ref<Patient['status'][]>([
+  'active',
+  'onboarding',
+  'churned',
+  'inquiry',
+])
+
+const table = useTemplateRef('table')
+
 const UBadge = resolveComponent('UBadge')
 
 const columns: TableColumn<Patient>[] = [
@@ -51,7 +60,24 @@ function formatDate(date: Date) {
     <template #body>
       <UContainer>
         <UPageCard variant="subtle">
+          <div class="flex px-4 py-3.5 border-b border-accented">
+            <USelectMenu
+              :model-value="
+                table?.tableApi
+                  ?.getColumn('status')
+                  ?.getFilterValue() as Patient['status']
+              "
+              class="max-w-sm"
+              placeholder="Filter status..."
+              clear
+              :items="statusOptions"
+              @update:model-value="
+                table?.tableApi?.getColumn('status')?.setFilterValue($event)
+              "
+            />
+          </div>
           <UTable
+            ref="table"
             :data="patients"
             :columns="columns"
             :loading="status === 'pending'"
