@@ -21,8 +21,13 @@ const columns: TableColumn<Patient>[] = [
   { accessorKey: 'lastName', header: 'Last Name' },
   {
     accessorKey: 'dateOfBirth',
-    header: 'Date of Birth',
-    cell: ({ row }) => formatDate(row.original.dateOfBirth),
+    header: 'Age',
+    cell: ({ row }) => {
+      const dob = new Date(row.original.dateOfBirth)
+      const ageDifMs = Date.now() - dob.getTime()
+      const ageDate = new Date(ageDifMs)
+      return Math.abs(ageDate.getUTCFullYear() - 1970)
+    },
   },
   { accessorKey: 'address', header: 'Address' },
   {
