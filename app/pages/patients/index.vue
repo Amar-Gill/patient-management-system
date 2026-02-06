@@ -16,12 +16,64 @@ const UBadge = resolveComponent('UBadge')
 const UButton = resolveComponent('UButton')
 
 const columns: TableColumn<Patient>[] = [
-  { accessorKey: 'firstName', header: 'First Name' },
+  {
+    accessorKey: 'firstName',
+    header: ({ column }) => {
+      const isSorted = column.getIsSorted()
+
+      return h(UButton, {
+        color: 'neutral',
+        variant: 'ghost',
+        label: 'First Name',
+        icon: isSorted
+          ? isSorted === 'asc'
+            ? 'i-lucide-arrow-up-narrow-wide'
+            : 'i-lucide-arrow-down-wide-narrow'
+          : 'i-lucide-arrow-up-down',
+        class: '-mx-2.5',
+        onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
+      })
+    },
+  },
   { accessorKey: 'middleName', header: 'Middle Name' },
-  { accessorKey: 'lastName', header: 'Last Name' },
+  {
+    accessorKey: 'lastName',
+    header: ({ column }) => {
+      const isSorted = column.getIsSorted()
+
+      return h(UButton, {
+        color: 'neutral',
+        variant: 'ghost',
+        label: 'Last Name',
+        icon: isSorted
+          ? isSorted === 'asc'
+            ? 'i-lucide-arrow-up-narrow-wide'
+            : 'i-lucide-arrow-down-wide-narrow'
+          : 'i-lucide-arrow-up-down',
+        class: '-mx-2.5',
+        onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
+      })
+    },
+  },
   {
     accessorKey: 'dateOfBirth',
-    header: 'Age',
+    header: ({ column }) => {
+      const isSorted = column.getIsSorted()
+
+      return h(UButton, {
+        color: 'neutral',
+        variant: 'ghost',
+        label: 'Age',
+        icon: isSorted
+          ? isSorted === 'asc'
+            ? 'i-lucide-arrow-up-narrow-wide'
+            : 'i-lucide-arrow-down-wide-narrow'
+          : 'i-lucide-arrow-up-down',
+        class: '-mx-2.5',
+        onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
+      })
+    },
+
     cell: ({ row }) => {
       const dob = new Date(row.original.dateOfBirth)
       const ageDifMs = Date.now() - dob.getTime()
