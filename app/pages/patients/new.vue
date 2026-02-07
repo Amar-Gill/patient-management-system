@@ -213,7 +213,11 @@ const inputDate = useTemplateRef('inputDate')
             </UFormField>
 
             <div class="flex gap-2 pt-4 w-full justify-center">
-              <UButton type="submit">
+              <UButton
+                loading-auto
+                type="submit"
+                icon="i-lucide-user-plus"
+              >
                 Submit
               </UButton>
             </div>
