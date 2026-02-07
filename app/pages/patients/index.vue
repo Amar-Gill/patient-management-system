@@ -35,7 +35,27 @@ const columns: TableColumn<Patient>[] = [
       })
     },
   },
-  { accessorKey: 'middleName', header: 'Middle Name' },
+  {
+    accessorKey: 'middleName',
+    header: ({ column }) => {
+      const isSorted = column.getIsSorted()
+
+      return h(UButton, {
+        color: 'neutral',
+        variant: 'ghost',
+        label: 'Middle Name',
+        icon: isSorted
+          ? isSorted === 'asc'
+            ? 'i-lucide-arrow-up-narrow-wide'
+            : 'i-lucide-arrow-down-wide-narrow'
+          : 'i-lucide-arrow-up-down',
+        class: '-mx-2.5',
+        onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
+      })
+    },
+
+    cell: ({ row }) => row.original.middleName || '---',
+  },
   {
     accessorKey: 'lastName',
     header: ({ column }) => {
@@ -144,6 +164,19 @@ function formatDate(date: Date) {
               placeholder="Filter first name..."
               @update:model-value="
                 table?.tableApi?.getColumn('firstName')?.setFilterValue($event)
+              "
+            />
+
+            <UInput
+              :model-value="
+                table?.tableApi
+                  ?.getColumn('middleName')
+                  ?.getFilterValue() as string
+              "
+              class="max-w-sm"
+              placeholder="Filter middle name..."
+              @update:model-value="
+                table?.tableApi?.getColumn('middleName')?.setFilterValue($event)
               "
             />
 
