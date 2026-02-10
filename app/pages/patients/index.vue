@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import type { TableColumn } from '@nuxt/ui'
 
-const { data: patients, status, error } = useFetch<Patient[]>('/api/patients')
+const {
+  data: patients,
+  status,
+  error,
+  refresh,
+} = useFetch<Patient[]>('/api/patients')
 
 const statusOptions = ref<Patient['status'][]>([
   'active',
@@ -227,7 +232,25 @@ function formatDate(date: Date) {
             :loading="status === 'pending'"
           >
             <template #empty>
-              <div class="text-center text-sm text-muted-foreground">
+              <div
+                v-if="error"
+                class="text-center text-sm text-muted"
+              >
+                Failed to load patients. Please try again later.
+                <div class="mt-2">
+                  <UButton
+                    label="Retry"
+                    icon="i-lucide-refresh-cw"
+                    variant="subtle"
+                    loading-auto
+                    @click="refresh"
+                  />
+                </div>
+              </div>
+              <div
+                v-else
+                class="text-center text-sm text-muted"
+              >
                 No patients found with current filters.
                 <div class="mt-2">
                   <UButton
