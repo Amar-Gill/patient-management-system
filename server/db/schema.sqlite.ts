@@ -25,3 +25,29 @@ export const patients = sqliteTable('patients', {
     .notNull()
     .default(sql`(strftime('%s','now'))`),
 })
+
+export const patientAddresses = sqliteTable('patient_addresses', {
+  id: integer().primaryKey({ autoIncrement: true }),
+  patientId: integer('patient_id')
+    .notNull()
+    .references(() => patients.id, { onDelete: 'cascade' }),
+  addressLine1: text('address_line_1').notNull(),
+  addressLine2: text('address_line_2'),
+  city: text().notNull(),
+  state: text().notNull(),
+  zipCode: text('zip_code').notNull(),
+  country: text().notNull().default('USA'),
+  addressType: text('address_type')
+    .notNull()
+    .$type<'home' | 'work' | 'billing' | 'other'>()
+    .default('home'),
+  isPrimary: integer('is_primary', { mode: 'boolean' })
+    .notNull()
+    .default(false),
+  createdAt: integer('created_at', { mode: 'timestamp' })
+    .notNull()
+    .default(sql`(strftime('%s','now'))`),
+  updatedAt: integer('updated_at', { mode: 'timestamp' })
+    .notNull()
+    .default(sql`(strftime('%s','now'))`),
+})
