@@ -10,6 +10,11 @@
       "type": "remote",
       "url": "https://ui.nuxt.com/mcp",
       "enabled": true
+    },
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "enabled": false
     }
   }
 }
