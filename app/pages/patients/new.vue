@@ -3,6 +3,25 @@ import { z } from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
 import { CalendarDate } from '@internationalized/date'
 
+const addressSchema = z.object({
+  addressLine1: z
+    .string()
+    .min(1, 'Address line 1 is required'),
+  addressLine2: z.string().optional(),
+  city: z
+    .string()
+    .min(1, 'City is required'),
+  state: z
+    .string()
+    .min(1, 'State is required'),
+  zipCode: z
+    .string()
+    .min(1, 'ZIP code is required')
+    .regex(/^\d{5}(-\d{4})?$/, 'Please enter a valid ZIP code'),
+  country: z.string().default('USA'),
+  addressType: z.enum(['home', 'work', 'billing', 'other']).default('home'),
+})
+
 const schema = z.object({
   firstName: z
     .string()
@@ -25,10 +44,7 @@ const schema = z.object({
       }
       return value
     }),
-  address: z
-    .string()
-    .min(1, 'Address is required')
-    .min(10, 'Address must be at least 10 characters'),
+  address: addressSchema,
   status: z.enum(['inquiry', 'onboarding', 'active', 'churned'], {
     error: () => ({ message: 'Please select a valid status' }),
   }),
@@ -43,12 +59,27 @@ const statusOptions: { label: string, value: Patient['status'] }[] = [
   { label: 'Churned', value: 'churned' },
 ]
 
+const addressTypeOptions: { label: string, value: 'home' | 'work' | 'billing' | 'other' }[] = [
+  { label: 'Home', value: 'home' },
+  { label: 'Work', value: 'work' },
+  { label: 'Billing', value: 'billing' },
+  { label: 'Other', value: 'other' },
+]
+
 const state = reactive<Partial<Schema>>({
   firstName: '',
   lastName: '',
   middleName: '',
   dateOfBirth: new CalendarDate(new Date().getFullYear() - 20, 1, 1),
-  address: '',
+  address: {
+    addressLine1: '',
+    addressLine2: '',
+    city: '',
+    state: '',
+    zipCode: '',
+    country: 'USA',
+    addressType: 'home',
+  },
   status: 'inquiry',
 })
 
@@ -95,7 +126,15 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   state.lastName = ''
   state.middleName = ''
   state.dateOfBirth = new CalendarDate(new Date().getFullYear() - 20, 1, 1)
-  state.address = ''
+  state.address = {
+    addressLine1: '',
+    addressLine2: '',
+    city: '',
+    state: '',
+    zipCode: '',
+    country: 'USA',
+    addressType: 'home',
+  }
   state.status = 'inquiry'
 }
 
@@ -188,18 +227,95 @@ const inputDate = useTemplateRef('inputDate')
               </UInputDate>
             </UFormField>
 
-            <UFormField
-              label="Address"
-              name="address"
-              required
-            >
-              <UTextarea
-                v-model="state.address"
-                placeholder="123 Main Street, Apt 4B, New York, NY 10001"
-                :rows="3"
-                class="w-full"
-              />
-            </UFormField>
+            <fieldset class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 space-y-4">
+              <legend class="text-sm font-medium px-2">
+                Address
+              </legend>
+
+              <UFormField
+                label="Address Line 1"
+                name="address.addressLine1"
+                required
+              >
+                <UInput
+                  v-model="state.address!.addressLine1"
+                  placeholder="123 Main Street"
+                  class="w-full"
+                />
+              </UFormField>
+
+              <UFormField
+                label="Address Line 2"
+                name="address.addressLine2"
+              >
+                <UInput
+                  v-model="state.address!.addressLine2"
+                  placeholder="Apt 4B"
+                  class="w-full"
+                />
+              </UFormField>
+
+              <div class="grid grid-cols-2 gap-4">
+                <UFormField
+                  label="City"
+                  name="address.city"
+                  required
+                >
+                  <UInput
+                    v-model="state.address!.city"
+                    placeholder="New York"
+                    class="w-full"
+                  />
+                </UFormField>
+
+                <UFormField
+                  label="State"
+                  name="address.state"
+                  required
+                >
+                  <UInput
+                    v-model="state.address!.state"
+                    placeholder="NY"
+                    class="w-full"
+                  />
+                </UFormField>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4">
+                <UFormField
+                  label="ZIP Code"
+                  name="address.zipCode"
+                  required
+                >
+                  <UInput
+                    v-model="state.address!.zipCode"
+                    placeholder="10001"
+                    class="w-full"
+                  />
+                </UFormField>
+
+                <UFormField
+                  label="Country"
+                  name="address.country"
+                >
+                  <UInput
+                    v-model="state.address!.country"
+                    placeholder="USA"
+                    class="w-full"
+                  />
+                </UFormField>
+              </div>
+
+              <UFormField
+                label="Address Type"
+                name="address.addressType"
+              >
+                <USelect
+                  v-model="state.address!.addressType"
+                  :items="addressTypeOptions"
+                />
+              </UFormField>
+            </fieldset>
 
             <UFormField
               label="Patient Status"
