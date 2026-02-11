@@ -23,6 +23,7 @@ const patientSchema = z.object({
       return val instanceof Date ? val : new Date(val)
     }),
   address: addressSchema,
+  secondaryAddress: addressSchema.optional(),
   status: z
     .enum(['inquiry', 'onboarding', 'active', 'churned'])
     .default('inquiry'),
@@ -64,7 +65,7 @@ export default eventHandler(async (event) => {
       throw new Error('Failed to create patient')
     }
 
-    // Insert the address into the patient_addresses table
+    // Insert the primary address into the patient_addresses table
     await tx
       .insert(patientAddresses)
       .values({
@@ -78,6 +79,23 @@ export default eventHandler(async (event) => {
         addressType: body.address.addressType,
         isPrimary: true, // First address is the primary address
       })
+
+    // Insert the secondary address if provided
+    if (body.secondaryAddress) {
+      await tx
+        .insert(patientAddresses)
+        .values({
+          patientId: newPatient.id,
+          addressLine1: body.secondaryAddress.addressLine1,
+          addressLine2: body.secondaryAddress.addressLine2 || null,
+          city: body.secondaryAddress.city,
+          state: body.secondaryAddress.state,
+          zipCode: body.secondaryAddress.zipCode,
+          country: body.secondaryAddress.country,
+          addressType: body.secondaryAddress.addressType,
+          isPrimary: false,
+        })
+    }
 
     return newPatient
   })

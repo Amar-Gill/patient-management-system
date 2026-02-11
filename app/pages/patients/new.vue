@@ -22,6 +22,19 @@ const addressSchema = z.object({
   addressType: z.enum(['home', 'work', 'billing', 'other']).default('home'),
 })
 
+const optionalAddressSchema = z.object({
+  addressLine1: z.string().min(1, 'Address line 1 is required'),
+  addressLine2: z.string().optional(),
+  city: z.string().min(1, 'City is required'),
+  state: z.string().min(1, 'State is required'),
+  zipCode: z
+    .string()
+    .min(1, 'ZIP code is required')
+    .regex(/^\d{5}(-\d{4})?$/, 'Please enter a valid ZIP code'),
+  country: z.string().default('USA'),
+  addressType: z.enum(['home', 'work', 'billing', 'other']).default('work'),
+}).optional()
+
 const schema = z.object({
   firstName: z
     .string()
@@ -45,6 +58,7 @@ const schema = z.object({
       return value
     }),
   address: addressSchema,
+  secondaryAddress: optionalAddressSchema,
   status: z.enum(['inquiry', 'onboarding', 'active', 'churned'], {
     error: () => ({ message: 'Please select a valid status' }),
   }),
@@ -66,6 +80,8 @@ const addressTypeOptions: { label: string, value: 'home' | 'work' | 'billing' | 
   { label: 'Other', value: 'other' },
 ]
 
+const showSecondaryAddress = ref(false)
+
 const state = reactive<Partial<Schema>>({
   firstName: '',
   lastName: '',
@@ -80,8 +96,27 @@ const state = reactive<Partial<Schema>>({
     country: 'USA',
     addressType: 'home',
   },
+  secondaryAddress: undefined,
   status: 'inquiry',
 })
+
+function toggleSecondaryAddress() {
+  showSecondaryAddress.value = !showSecondaryAddress.value
+  if (showSecondaryAddress.value) {
+    state.secondaryAddress = {
+      addressLine1: '',
+      addressLine2: '',
+      city: '',
+      state: '',
+      zipCode: '',
+      country: 'USA',
+      addressType: 'work',
+    }
+  }
+  else {
+    state.secondaryAddress = undefined
+  }
+}
 
 const toast = useToast()
 
@@ -135,6 +170,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     country: 'USA',
     addressType: 'home',
   }
+  state.secondaryAddress = undefined
+  showSecondaryAddress.value = false
   state.status = 'inquiry'
 }
 
@@ -229,7 +266,7 @@ const inputDate = useTemplateRef('inputDate')
 
             <fieldset class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 space-y-4">
               <legend class="text-sm font-medium px-2">
-                Address
+                Primary Address
               </legend>
 
               <UFormField
@@ -312,6 +349,110 @@ const inputDate = useTemplateRef('inputDate')
               >
                 <USelect
                   v-model="state.address!.addressType"
+                  :items="addressTypeOptions"
+                />
+              </UFormField>
+            </fieldset>
+
+            <div class="flex justify-center">
+              <UButton
+                type="button"
+                variant="ghost"
+                :icon="showSecondaryAddress ? 'i-lucide-minus' : 'i-lucide-plus'"
+                @click="toggleSecondaryAddress"
+              >
+                {{ showSecondaryAddress ? 'Remove Secondary Address' : 'Add Secondary Address' }}
+              </UButton>
+            </div>
+
+            <fieldset
+              v-if="showSecondaryAddress"
+              class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 space-y-4"
+            >
+              <legend class="text-sm font-medium px-2">
+                Secondary Address
+              </legend>
+
+              <UFormField
+                label="Address Line 1"
+                name="secondaryAddress.addressLine1"
+                required
+              >
+                <UInput
+                  v-model="state.secondaryAddress!.addressLine1"
+                  placeholder="456 Oak Avenue"
+                  class="w-full"
+                />
+              </UFormField>
+
+              <UFormField
+                label="Address Line 2"
+                name="secondaryAddress.addressLine2"
+              >
+                <UInput
+                  v-model="state.secondaryAddress!.addressLine2"
+                  placeholder="Suite 100"
+                  class="w-full"
+                />
+              </UFormField>
+
+              <div class="grid grid-cols-2 gap-4">
+                <UFormField
+                  label="City"
+                  name="secondaryAddress.city"
+                  required
+                >
+                  <UInput
+                    v-model="state.secondaryAddress!.city"
+                    placeholder="Los Angeles"
+                    class="w-full"
+                  />
+                </UFormField>
+
+                <UFormField
+                  label="State"
+                  name="secondaryAddress.state"
+                  required
+                >
+                  <UInput
+                    v-model="state.secondaryAddress!.state"
+                    placeholder="CA"
+                    class="w-full"
+                  />
+                </UFormField>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4">
+                <UFormField
+                  label="ZIP Code"
+                  name="secondaryAddress.zipCode"
+                  required
+                >
+                  <UInput
+                    v-model="state.secondaryAddress!.zipCode"
+                    placeholder="90001"
+                    class="w-full"
+                  />
+                </UFormField>
+
+                <UFormField
+                  label="Country"
+                  name="secondaryAddress.country"
+                >
+                  <UInput
+                    v-model="state.secondaryAddress!.country"
+                    placeholder="USA"
+                    class="w-full"
+                  />
+                </UFormField>
+              </div>
+
+              <UFormField
+                label="Address Type"
+                name="secondaryAddress.addressType"
+              >
+                <USelect
+                  v-model="state.secondaryAddress!.addressType"
                   :items="addressTypeOptions"
                 />
               </UFormField>
