@@ -143,6 +143,20 @@ const columns: TableColumn<Patient>[] = [
     },
     cell: ({ row }) => formatDate(row.original.createdAt),
   },
+  {
+    id: 'actions',
+    header: 'Actions',
+    cell: ({ row }) => {
+      return h(UButton, {
+        color: 'neutral',
+        variant: 'soft',
+        size: 'sm',
+        label: 'View / Edit',
+        icon: 'i-lucide-pencil',
+        to: `/patients/${row.original.id}`,
+      })
+    },
+  },
 ]
 
 function formatDate(date: Date) {
